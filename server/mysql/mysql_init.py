@@ -1,7 +1,5 @@
 import os
 import subprocess
-import time
-import sys
 
 logfile = open("mysql_initlog.txt","w")
 
@@ -22,6 +20,8 @@ print("INIT: All default MySQL instances killed")
 subprocess.run("sudo mysqld_safe &", shell=True, stdout=logfile)
 print("INIT: MySQL server started in safe mode")
 
+import sys
+import time
 for seconds in range(15,0,-1):
     sys.stdout.write("\rINIT: Waiting " + str(seconds) + " seconds before updating MySQL default database")
     sys.stdout.flush()
