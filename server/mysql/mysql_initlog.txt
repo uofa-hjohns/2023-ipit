@@ -1,0 +1,26 @@
+Hit:1 https://dl.yarnpkg.com/debian stable InRelease
+Hit:2 https://repo.anaconda.com/pkgs/misc/debrepo/conda stable InRelease
+Hit:3 https://packages.microsoft.com/repos/microsoft-ubuntu-focal-prod focal InRelease
+Hit:4 http://archive.ubuntu.com/ubuntu focal InRelease
+Hit:5 http://security.ubuntu.com/ubuntu focal-security InRelease
+Hit:7 http://archive.ubuntu.com/ubuntu focal-updates InRelease
+Hit:8 http://archive.ubuntu.com/ubuntu focal-backports InRelease
+Hit:6 https://packagecloud.io/github/git-lfs/ubuntu focal InRelease
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+mysql-server is already the newest version (8.0.34-0ubuntu0.20.04.1).
+0 upgraded, 0 newly installed, 0 to remove and 15 not upgraded.
+Requirement already satisfied: mysql-connector-python in /usr/local/python/3.10.8/lib/python3.10/site-packages (8.1.0)
+Requirement already satisfied: protobuf<=4.21.12,>=4.21.1 in /usr/local/python/3.10.8/lib/python3.10/site-packages (from mysql-connector-python) (4.21.12)
+ * Stopping MySQL database server mysqld
+   ...done.
+ * Stopping MySQL database server mysqld
+   ...done.
+mysql: no process found
+mysqld_safe: no process found
+mysqld: no process found
+2023-10-16T03:06:54.570645Z mysqld_safe Logging to '/var/log/mysql/error.log'.
+2023-10-16T03:06:54.598969Z mysqld_safe Starting mysqld daemon with databases from /var/lib/mysql
+2023-10-16T03:06:53.594187Z mysqld_safe mysqld from pid file /var/lib/mysql/codespaces-0516d3.pid ended
