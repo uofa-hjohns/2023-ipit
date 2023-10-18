@@ -30,6 +30,7 @@ def mysql_connect():
     except:
       sys.exit('ERROR: Connection to MySQL server failed (importing IPIT database unsuccessful)\nEXITING...')
 
+# EXECUTE AND LOG ANY MYSQL COMMANDS
 def mysql_execute(db,dbcr,command):
   dbcr.execute(command)
   db.commit()
@@ -63,8 +64,11 @@ def db_IPITimport():
 
 
 # BACKUP/DUMP IPIT DATABASE TO FILE
-def db_IPITexport():
+def db_IPITexportSQL():
   subprocess.run("sudo mysqldump --no-data=False --databases ipit --result-file=ipit.sql", shell=True)
+
+def db_IPITexportCSV():
+  print('csv export not implemented yet')
 
 # CREATE IPIT DATABASE
 def db_IPITcreate(db,dbcr):
@@ -140,6 +144,7 @@ def getCSVarray():
           ledgerarray.append(entry)
   return ledgerarray
 
+
 def InsertIntoSQL(array,db,dbcr):
   AllQueries = []
   for entry in array:
@@ -167,7 +172,8 @@ def main():
 
   InsertIntoSQL(getCSVarray(),db,dbcr)
 
-  db_IPITexport()
+  db_IPITexportSQL()
+  db_IPITexportCSV()
 
   logfile.close()
 
