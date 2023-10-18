@@ -149,13 +149,13 @@ def InsertIntoSQL(array,db,dbcr):
   AllQueries = []
   for entry in array:
     AllQueries.append(f"""INSERT IGNORE INTO Customers (Customer_ID, Customer_Name, Customer_BillerID) VALUES ('{entry[17]}', '{entry[18]}', '{entry[19]}')""")
-    AllQueries.append(f"""INSERT IGNORE INTO Vendors (Vendor_ID, Vendor_Name) VALUES ('{entry[14]}', '{entry[15]}')""")
-    AllQueries.append(f"""INSERT IGNORE INTO Transactions (Transaction_InvoiceID, Transaction_InvoiceAmount, TransactionFK_Customer_ID, TransactionFK_Vendor_ID) VALUES ('{entry[16]}','{entry[4]}','{entry[17]}','{entry[14]}')""")
-    AllQueries.append(f"""INSERT IGNORE INTO GeneralLedgers (GL_AccountID, GL_AccountDescription) VALUES ('{entry[2]}','{entry[3]}')""")
-    AllQueries.append(f"""INSERT IGNORE INTO Operators (Operator_ID, Operator_Name) VALUES ('{entry[7]}','{entry[8]}')""")
-    AllQueries.append(f"""INSERT IGNORE INTO Sources(Source_ID, Source_LongDescription) VALUES ('{entry[12]}','{entry[6]}')""")
-    AllQueries.append(f"""INSERT IGNORE INTO GeneralLedgerEntries(GLE_LineNumber, GLE_LineDescription, GLE_Period, GLE_Year, GLEFK_GL_AccountID, GLEFK_Operator_ID, GLEFK_Source_ID) VALUES ('{entry[9]}','{entry[5]}','{entry[10]}','{entry[11]}','{entry[2]}','{entry[7]}','{entry[12]}')""")
-    AllQueries.append(f"""INSERT IGNORE INTO Journals(Journal_ID, Journal_Date, Journal_EntryDate, JournalFK_GLE_LineNumber, JournalFK_Transaction_InvoiceID) VALUES ('{entry[0]}','{entry[1]}','{entry[13]}','{entry[9]}','{entry[16]}')""")
+    #AllQueries.append(f"""INSERT IGNORE INTO Vendors (Vendor_ID, Vendor_Name) VALUES ('{entry[14]}', '{entry[15]}')""")
+    #AllQueries.append(f"""INSERT IGNORE INTO Transactions (Transaction_InvoiceID, Transaction_InvoiceAmount, TransactionFK_Customer_ID, TransactionFK_Vendor_ID) VALUES ('{entry[16]}','{entry[4]}','{entry[17]}','{entry[14]}')""")
+    #AllQueries.append(f"""INSERT IGNORE INTO GeneralLedgers (GL_AccountID, GL_AccountDescription) VALUES ('{entry[2]}','{entry[3]}')""")
+    #AllQueries.append(f"""INSERT IGNORE INTO Operators (Operator_ID, Operator_Name) VALUES ('{entry[7]}','{entry[8]}')""")
+    #AllQueries.append(f"""INSERT IGNORE INTO Sources(Source_ID, Source_LongDescription) VALUES ('{entry[12]}','{entry[6]}')""")
+    #AllQueries.append(f"""INSERT IGNORE INTO GeneralLedgerEntries(GLE_LineNumber, GLE_LineDescription, GLE_Period, GLE_Year, GLEFK_GL_AccountID, GLEFK_Operator_ID, GLEFK_Source_ID) VALUES ('{entry[9]}','{entry[5]}','{entry[10]}','{entry[11]}','{entry[2]}','{entry[7]}','{entry[12]}')""")
+    #AllQueries.append(f"""INSERT IGNORE INTO Journals(Journal_ID, Journal_Date, Journal_EntryDate, JournalFK_GLE_LineNumber, JournalFK_Transaction_InvoiceID) VALUES ('{entry[0]}','{entry[1]}','{entry[13]}','{entry[9]}','{entry[16]}')""")
 
   for query in AllQueries:
     mysql_execute(db,dbcr,query)
