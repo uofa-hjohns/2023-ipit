@@ -6,6 +6,9 @@ logfile = open("mysql_initlog.txt","w")
 subprocess.run("sudo apt-get update", shell=True, stdout=logfile)
 print("INIT: APT packages updated")
 
+subprocess.run("sudo apt-get -y install default-mysql-server", shell=True, stdout=logfile)
+print("INIT: MySQL Default installed through APT")
+
 subprocess.run("sudo apt-get -y install mysql-server", shell=True, stdout=logfile)
 print("INIT: MySQL installed through APT")
 
