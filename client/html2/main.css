@@ -1,0 +1,77 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: sans-serif;
+    padding-top: 140px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+ }
+ footer {
+    margin-top: auto;
+ }
+#nav-bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+.navbar {
+    background-image: linear-gradient(to right, #102535, #005a9c);
+    padding: 0 !important;
+    padding-right: 20px !important;
+    padding-left: 20px !important;
+}
+.navbar-brand img{
+    height: 80px;
+    padding-right: 20px;
+}
+.navbar-brand {
+    color: white !important;
+    font-size: 40px !important;
+    font-family: 'Oswald', sans-serif !important;
+    padding: justify !important;
+}
+.nav-bar li {
+    padding: 0 10px;
+}
+.navbar-nav li a {
+    color: white !important;   
+    font-family: 'Open Sans', sans-serif !important; 
+    float: right;
+}
+.navbar-toggler-icon {
+    color: white;
+}
+.bs-navbar-toggler {
+    color: white;
+}
+.nav-item .dropdown-menu {
+    background-color: #005a9c;
+}
+
+.navbar-toggler {
+    border-color: white;
+    color: white;
+}
+.custom-toggler.navbar-toggler {
+    border-color: white;
+    color: white;
+}
+
+.fa-regular.fa-bell {
+    padding-left: 20px;
+    font-size: xx-large;
+    color: white;
+}
+
+.fa-regular.fa-bell:hover {
+    color: #005a9c;
+}
+.lead.text-muted {
+    font-family: 'Open Sans', sans-serif !important; 
+}
+.jumbotron-heading {
+    font-family: 'Oswald', sans-serif !important;
+}
