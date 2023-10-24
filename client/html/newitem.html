@@ -57,34 +57,38 @@
             <section class="jumbotron text-centre">
                 <div class="container">
                     <h1 class="jumbotron-heading">Please use the form below to add an item to the system</h1>
-                    <form>
-                        <label for="iName">Item Name: </label> <!-- Line description -->
-                        <input type="text" id="iName" name="iName" value=""><br>
+                    <div class="collection">
+                        <form>
+                            <label for="iName">Item Name: </label> <!-- Line description -->
+                            <input type="text" id="iName" name="iName" value=""><br>
 
-                        <label for="lDescCode">Source:</label> <!-- Journal ID seems to depend on source? -->
-                        <select id="lDescCode" name="long description code">
-                            <option value="AP">AP</option>
-                            <option value="SPA">SPA</option>
-                        </select><br>
+                            <label for="lDescCode">Source:</label> <!-- Journal ID seems to depend on source? -->
+                            <select id="lDescCode" name="long description code">
+                                <option value="AP">AP</option>
+                                <option value="SPA">SPA</option>
+                            </select><br>
 
-                        <label for="aDesc">Account description: </label> <!-- Account description -->
-                        <input type="text" id="aDesc" name="aDesc" value=""><br>
+                            <label for="aDesc">Account description: </label> <!-- Account description -->
+                            <input type="text" id="aDesc" name="aDesc" value=""><br>
 
-                        <label for="manuf">Manufacturer: </label>
-                        <input type="text" id="manuf" name="manuf" value=""><br>
+                            <label for="manuf">Manufacturer: </label>
+                            <input type="text" id="manuf" name="manuf" value=""><br>
 
-                        <label for="vName">Vendor: </label> <!-- Vendor name, vendor ID could be hardcoded? -->
-                        <input type="text" id="vName" name="vName" value=""><br>
+                            <label for="vName">Vendor: </label> <!-- Vendor name, vendor ID could be hardcoded? -->
+                            <input type="text" id="vName" name="vName" value=""><br>
 
-                        <label for="cpi">Cost per item (in $AUD): $</label>
-                        <input type="text" id="cpi" name="cpi" value=""><br>
+                            <label for="cpi">Cost per item (in $AUD): $</label>
+                            <input type="text" id="cpi" name="cpi" value=""><br>
 
-                        <label for="amt">Amount of item: </label> <!-- Amount -->
-                        <input type="text" id="amt" name="amt" value=""><br>
+                            <label for="amt">Amount of item: </label> <!-- Amount -->
+                            <input type="text" id="amt" name="amt" value=""><br>
 
-                        <label for="invID">Invoice ID: </label> <!-- Ref. / Invoice No / Voucher ID -->
-                        <input type="text" id="invID" name="invID" value=""><br>
-                    </form>
+                            <label for="invID">Invoice ID: </label> <!-- Ref. / Invoice No / Voucher ID -->
+                            <input type="text" id="invID" name="invID" value=""><br>
+
+                            <input type="submit" value="Submit" class="itemText submitbutt">
+                        </form>
+                    </div>
                 </div>
             </section>
         </main>
