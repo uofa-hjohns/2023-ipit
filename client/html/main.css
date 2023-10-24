@@ -40,3 +40,27 @@ body {
 .nav-item .dropdown-menu {
     background-color: #005a9c;
 }
+.criticalred {
+    color: red;
+}
+.collection {
+    background-color: #dbd9d3;
+    border: none;
+    max-width: fit-content;
+    word-wrap: break-word;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin: 10px 10px 10px 10px;
+    float: left;
+}
+.collectionIcon {
+    border-radius: 10px;
+    height: 50px;
+    width: 50px;
+}
+.itemIcon {
+    float: left;
+}
+.itemText {
+    font-size: 12px;
+}
