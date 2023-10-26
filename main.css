@@ -1,0 +1,42 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: sans-serif;
+    padding-top: 140px;
+ }
+#nav-bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+.navbar {
+    background-image: linear-gradient(to right, #102535, #005a9c);
+    padding: 0 !important;
+}
+.navbar-brand img{
+    height: 80px;
+    padding-left: 20px;
+}
+.nav-bar li {
+    padding: 0 10px;
+    padding-right: 20px;
+}
+.navbar-nav li a {
+    color: white !important;    
+    font-weight: 600;
+    padding-left: 20px;
+}
+.navbar-toggler-icon {
+    color: white;
+}
+#navbarNav.collapse.navbar-collapse {
+    padding-right: 20px;
+}
+.bs-navbar-toggler {
+    color: white;
+}
+.nav-item .dropdown-menu {
+    background-color: #005a9c;
+}
