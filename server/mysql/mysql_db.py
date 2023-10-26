@@ -8,6 +8,27 @@ first_time = 0
 mysql_counter = 0
 logfile = open("mysql_dblog.txt","w")
 
+display = """
+SELECT
+Line_Number, Line_Description,
+Operator_ID, Operator_Name,
+Source_ID, Source_Description,
+Ledger_ID, Ledger_Description,
+Journal_ID, Journal_Date, Journal_EntryDate,
+Invoice_ID, Invoice_Amount,
+Customer_ID, Customer_Name, Customer_BillerID,
+Vendor_ID, Vendor_Name
+FROM Entries 
+INNER JOIN Operators ON Entries.Line_Operator_ID = Operators.Operator_ID
+INNER JOIN Sources ON Entries.Line_Source_ID = Sources.Source_ID
+INNER JOIN Ledgers ON Sources.Source_Ledger_ID = Ledgers.Ledger_ID
+INNER JOIN Journals ON Entries.Line_Journal_ID = Journals.Journal_ID
+INNER JOIN Invoices ON Journals.Journal_Invoice_ID = Invoices.Invoice_ID
+INNER JOIN Customers ON Invoices.Invoice_Customer_ID = Customers.Customer_ID
+INNER JOIN Vendors ON Invoices.Invoice_Vendor_ID = Vendors.Vendor_ID
+ORDER BY Line_Number;
+"""
+
 # CONNECT TO MYSQL SERVER
 def mysql_connect():
   try:
@@ -73,63 +94,77 @@ def db_IPITexportCSV():
 # CREATE IPIT DATABASE
 def db_IPITcreate(db,dbcr):
   SQLExec = [
-  """CREATE TABLE Customers (
-  Customer_ID VARCHAR(255) PRIMARY KEY, 
-  Customer_Name VARCHAR(255), 
-  Customer_BillerID VARCHAR(255)
-  )""",
-
-  """CREATE TABLE Vendors (
-  Vendor_ID INT NOT NULL PRIMARY KEY, 
-  Vendor_Name VARCHAR(255)
-  )""",
-  
-  """CREATE TABLE Transactions (
-  Transaction_InvoiceID VARCHAR(255) PRIMARY KEY, 
-  Transaction_InvoiceAmount INT NOT NULL, 
-  TransactionFK_Customer_ID VARCHAR(255), 
-  TransactionFK_Vendor_ID INT NOT NULL, 
-  CONSTRAINT FK_TransactionCustomers FOREIGN KEY (TransactionFK_Customer_ID) REFERENCES Customers(Customer_ID), 
-  CONSTRAINT FK_TransactionVendors FOREIGN KEY (TransactionFK_Vendor_ID) REFERENCES Vendors(Vendor_ID)
-  )""",
-  
-  """CREATE TABLE GeneralLedgers (
-  GL_AccountID INT NOT NULL PRIMARY KEY, 
-  GL_AccountDescription VARCHAR(255)
-  )""",
-  
-  """CREATE TABLE Operators (
-  Operator_ID VARCHAR(255) PRIMARY KEY, 
-  Operator_Name VARCHAR(255)
-  )""",
-  
-  """CREATE TABLE Sources (
-  Source_ID VARCHAR(255) PRIMARY KEY, 
-  Source_LongDescription VARCHAR(255)
-  )""",
-  
-  """CREATE TABLE GeneralLedgerEntries (
-  GLE_LineNumber INT NOT NULL PRIMARY KEY, 
-  GLE_LineDescription VARCHAR(255), 
-  GLE_Period INT NOT NULL, 
-  GLE_Year YEAR NOT NULL,
-  GLEFK_GL_AccountID INT NOT NULL, 
-  GLEFK_Operator_ID VARCHAR(255), 
-  GLEFK_Source_ID VARCHAR(255), 
-  CONSTRAINT FK_GLEtGL FOREIGN KEY (GLEFK_GL_AccountID) REFERENCES GeneralLedgers(GL_AccountID), 
-  CONSTRAINT FK_GLEOper FOREIGN KEY (GLEFK_Operator_ID) REFERENCES Operators(Operator_ID), 
-  CONSTRAINT FK_GLESrc FOREIGN KEY (GLEFK_Source_ID) REFERENCES Sources(Source_ID)
-  )""",
-  
-  """CREATE TABLE Journals (
-  Journal_ID VARCHAR(255) PRIMARY KEY,
-  Journal_Date VARCHAR(255),
-  Journal_EntryDate VARCHAR(255),
-  JournalFK_GLE_LineNumber INT NOT NULL,
-  JournalFK_Transaction_InvoiceID VARCHAR(255),
-  CONSTRAINT FK_Journals_GLE FOREIGN KEY (JournalFK_GLE_LineNumber) REFERENCES GeneralLedgerEntries(GLE_LineNumber),
-  CONSTRAINT FK_Journals_Transactions FOREIGN KEY (JournalFK_Transaction_InvoiceID) REFERENCES Transactions(Transaction_InvoiceID)
-  )"""]
+  """
+	CREATE TABLE Customers (
+	Customer_ID VARCHAR(255) PRIMARY KEY,
+	Customer_Name VARCHAR(255),
+	Customer_BillerID VARCHAR(255)
+	)
+	""",
+	
+	"""
+	CREATE TABLE Vendors (
+	Vendor_ID VARCHAR(255) PRIMARY KEY,
+	Vendor_Name VARCHAR(255)
+	)
+	""",
+	
+	"""
+	CREATE TABLE Ledgers (
+	Ledger_ID VARCHAR(255) PRIMARY KEY,
+	Ledger_Description VARCHAR(255)
+	)
+	""",
+	
+	"""
+	CREATE TABLE Operators (
+	Operator_ID VARCHAR(255) PRIMARY KEY,
+	Operator_Name VARCHAR(255)
+	)
+	""",
+	
+	"""
+	CREATE TABLE Invoices (
+	Invoice_ID VARCHAR(255) PRIMARY KEY,
+	Invoice_Amount VARCHAR(255),
+	Invoice_Customer_ID VARCHAR(255),
+	Invoice_Vendor_ID VARCHAR(255),
+	CONSTRAINT FK_InvoiceCustomer FOREIGN KEY (Invoice_Customer_ID) REFERENCES Customers(Customer_ID),
+	CONSTRAINT FK_InvoiceVendor FOREIGN KEY (Invoice_Vendor_ID) REFERENCES Vendors(Vendor_ID)
+	)
+	""",
+	
+	"""
+	CREATE TABLE Journals (
+	Journal_ID VARCHAR(255) PRIMARY KEY,
+	Journal_Date VARCHAR(255),
+	Journal_EntryDate VARCHAR(255),
+	Journal_Invoice_ID VARCHAR(255),
+	CONSTRAINT FK_JournalInvoice FOREIGN KEY (Journal_Invoice_ID) REFERENCES Invoices(Invoice_ID)
+	)
+	""",
+	
+	"""
+	CREATE TABLE Sources (
+	Source_ID VARCHAR(255) PRIMARY KEY,
+	Source_Description VARCHAR(255),
+	Source_Ledger_ID VARCHAR(255),
+	CONSTRAINT FK_SourceLedger FOREIGN KEY (Source_Ledger_ID) REFERENCES Ledgers(Ledger_ID)
+	)
+	""",
+	
+	"""
+	CREATE TABLE Entries (
+	Line_Number INT NOT NULL PRIMARY KEY,
+	Line_Description VARCHAR(255),
+	Line_Operator_ID VARCHAR(255),
+	Line_Source_ID VARCHAR(255),
+	Line_Journal_ID VARCHAR(255),
+	CONSTRAINT FK_LineOperator FOREIGN KEY (Line_Operator_ID) REFERENCES Operators(Operator_ID),
+	CONSTRAINT FK_LineSource FOREIGN KEY (Line_Source_ID) REFERENCES Sources(Source_ID),
+	CONSTRAINT FK_LineJournal FOREIGN KEY (Line_Journal_ID) REFERENCES Journals(Journal_ID)
+	)
+	"""]
   
   for x in SQLExec:
     mysql_execute(db,dbcr,x)
@@ -140,7 +175,7 @@ def getCSVarray():
   with open('Operating Expense Transactions.csv', 'r') as file:
     LedgerCSV = csv.reader(file)
     for entry in LedgerCSV:
-        if entry[0] != "Journal ID":
+        if entry[0] != "Journal ID" and (entry[5].startswith("UPH") != True) and (entry[5].startswith("Purchase") != True):
           ledgerarray.append(entry)
   return ledgerarray
 
@@ -150,12 +185,12 @@ def InsertIntoSQL(array,db,dbcr):
   for entry in array:
     AllQueries.append(f"""INSERT IGNORE INTO Customers (Customer_ID, Customer_Name, Customer_BillerID) VALUES ('{entry[17]}', '{entry[18]}', '{entry[19]}')""")
     AllQueries.append(f"""INSERT IGNORE INTO Vendors (Vendor_ID, Vendor_Name) VALUES ('{entry[14]}', '{entry[15]}')""")
-    AllQueries.append(f"""INSERT IGNORE INTO Transactions (Transaction_InvoiceID, Transaction_InvoiceAmount, TransactionFK_Customer_ID, TransactionFK_Vendor_ID) VALUES ('{entry[16]}','{entry[4]}','{entry[17]}','{entry[14]}')""")
-    AllQueries.append(f"""INSERT IGNORE INTO GeneralLedgers (GL_AccountID, GL_AccountDescription) VALUES ('{entry[2]}','{entry[3]}')""")
+    AllQueries.append(f"""INSERT IGNORE INTO Ledgers (Ledger_ID, Ledger_Description) VALUES ('{entry[2]}','{entry[3]}')""")
     AllQueries.append(f"""INSERT IGNORE INTO Operators (Operator_ID, Operator_Name) VALUES ('{entry[7]}','{entry[8]}')""")
-    AllQueries.append(f"""INSERT IGNORE INTO Sources(Source_ID, Source_LongDescription) VALUES ('{entry[12]}','{entry[6]}')""")
-    AllQueries.append(f"""INSERT IGNORE INTO GeneralLedgerEntries(GLE_LineNumber, GLE_LineDescription, GLE_Period, GLE_Year, GLEFK_GL_AccountID, GLEFK_Operator_ID, GLEFK_Source_ID) VALUES ('{entry[9]}','{entry[5]}','{entry[10]}','{entry[11]}','{entry[2]}','{entry[7]}','{entry[12]}')""")
-    AllQueries.append(f"""INSERT IGNORE INTO Journals(Journal_ID, Journal_Date, Journal_EntryDate, JournalFK_GLE_LineNumber, JournalFK_Transaction_InvoiceID) VALUES ('{entry[0]}','{entry[1]}','{entry[13]}','{entry[9]}','{entry[16]}')""")
+    AllQueries.append(f"""INSERT IGNORE INTO Invoices (Invoice_ID, Invoice_Amount, Invoice_Customer_ID, Invoice_Vendor_ID) VALUES ('{entry[16]}','{entry[4]}','{entry[17]}','{entry[14]}')""")
+    AllQueries.append(f"""INSERT IGNORE INTO Journals (Journal_ID, Journal_Date, Journal_EntryDate, Journal_Invoice_ID) VALUES ('{entry[0]}','{entry[1]}','{entry[13]}','{entry[16]}')""")
+    AllQueries.append(f"""INSERT IGNORE INTO Sources (Source_ID, Source_Description, Source_Ledger_ID) VALUES ('{entry[12]}','{entry[6]}','{entry[2]}')""")
+    AllQueries.append(f"""INSERT IGNORE INTO Entries (Line_Number, Line_Description, Line_Operator_ID, Line_Source_ID, Line_Journal_ID) VALUES ('{entry[9]}','{entry[5]}','{entry[7]}','{entry[12]}','{entry[0]}')""")
 
   for query in AllQueries:
     mysql_execute(db,dbcr,query)
