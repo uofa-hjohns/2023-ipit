@@ -4,17 +4,17 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width-device-width,initial-scale=1">
         <title>ITrack - The University of Adelaide Admin Page</title>
-        <link rel="stylesheet" href="main.css">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}"> <!-- Reference to css for Flask compatibility -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
         <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-        <script src="functions.js"></script>
+        <script src="{{ url_for('static', filename='functions.js') }}"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
         <section id="nav-bar">
             <nav class="navbar fixed-top navbar-expand-sm navbar-light">
-            <a class="navbar-brand" href="#"><img src="logo.png"></a>
+            <a class="navbar-brand" href="#"><img src="{{ url_for('static', filename='logo.png') }}"></a>
             <h1 class="criticalred">Admin</h1>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -43,7 +43,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Insurance Claims</a>
                 </li>
-                <li class="nav-item">
+                <li class a nav-item">
                     <a class="nav-link" href="#">Location</a>
                 </li>
                 <li class="nav-item">
@@ -62,7 +62,7 @@
                     <p>
                       <a href="#" class="btn btn-primary my-2">Loan a device</a>
                       <a href="#" class="btn btn-secondary my-2">Return a device</a>
-                      <a href="newitem.html" class="btn btn-primary my-2">Add a Device</a>
+                      <a href="{{ url_for('static', filename='newitem.html') }}" class="btn btn-primary my-2">Add a Device</a>
                     </p>
                   </div>
             </section>
@@ -70,15 +70,35 @@
                 <div class="container">
                     <h2>Available collections</h2>
                     <a><div onclick="togglediv('studLaptops')" class="collection">
-                    <img class="collectionIcon" src="150laptops.png">
+                    <img class="collectionIcon" src="{{ url_for('static', filename='150laptops.png') }}">
                     <b>Student Laptops</b> 3 Items
                     </div></a>
 
                     <a><div onclick="togglediv('prints')" class="collection">
-                        <img class="collectionIcon" src="150laptops.png">
+                        <img class="collectionIcon" src="{{ url_for('static', filename='150laptops.png') }}">
                         <b>Printers</b> 8 Items
                     </div></a>
                 </div>
+                <br>
+                <div class="container">
+                    <a href="#" id="viewAllButton" class="btn btn-primary my-2">View All</a>
+                </div>
+                <div id="databaseEntries">
+                    <table id="entriesTable">
+                        <thead>
+                            <tr>
+                                <th>Line Description</th>
+                                <th>Line Journal ID</th>
+                                <th>Line Number</th>
+                                <th>Line Operator ID</th>
+                                <th>Line Source ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Entries will be added here -->
+                        </tbody>
+                    </table>
+                </div>                
                 <br>
                 <br>
                 <br>
@@ -86,7 +106,7 @@
                 <div id="studLaptops" class="container collapse" style="display: none;">
                     <h2>Student Laptops:</h2>
                     <a><div onclick="togglediv('laptop1')" class="collection">
-                        <img class="collectionIcon" src="150laptops.png">
+                        <img class="collectionIcon" src="{{ url_for('static', filename='150laptops.png') }}">
                         <b>M1 Macbook Air (2021)</b>
                         <p class="itemText">
                             <br>Loaned to: Jarvis Collins - a1826609
@@ -102,7 +122,7 @@
                         </p>
                     </div></a>
                     <a><div onclick="togglediv('laptop2')" class="collection">
-                        <img class="collectionIcon" src="150laptops.png">
+                        <img class="collectionIcon" src="{{ url_for('static', filename='150laptops.png') }}">
                         <b>Dell Latitude 3510</b>
                         <p class="itemText">
                             <br>Loaned to: Will Daniels - a5318008
@@ -121,7 +141,7 @@
                 <div id="prints" class="container collapse" style="display: none;">
                     <h2>Printers:</h2>
                     <a><div onclick="togglediv('printer1')" class="collection">
-                        <img class="collectionIcon" src="150laptops.png">
+                        <img class="collectionIcon" src="{{ url_for('static', filename='150laptops.png') }}">
                         <b>EcoTank ET-4850</b>
                         <p class="itemText">
                             <br>Loaned to: Teacher Name - a1111777
@@ -139,5 +159,53 @@
                 </div>
             </section>
         </main>
+        <script>
+            // Function to load entries from Python script
+            function loadEntries() {
+                const databaseEntries = document.getElementById("databaseEntries");
+                const viewAllButton = document.getElementById("viewAllButton");
+                const entriesTable = document.getElementById("entriesTable");
+                const tableBody = document.querySelector("#entriesTable tbody");
+
+                // Event listener for the "View All" button
+                viewAllButton.addEventListener("click", function () {
+                    while (tableBody.firstChild) {
+                        tableBody.removeChild(tableBody.firstChild);
+                        }
+                    entriesTable.style.display = "table"; // Display the table
+                    // Make an AJAX request to fetch data from Flask route '/get_entries'
+                    const xhr = new XMLHttpRequest();
+                    xhr.open("GET", "/get_entries", true);
+
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            const entries = JSON.parse(xhr.responseText);
+
+                            // Display the entries in the databaseEntries div
+                            //databaseEntries.innerHTML = "<pre>" + JSON.stringify(entries, null, 2) + "</pre>";
+                            populateTable(entries);
+                        }
+                    };
+
+                    xhr.send();
+                });
+            }
+            // Function to populate the HTML table with JSON data
+            function populateTable(entries) {
+                const tableBody = document.querySelector("#entriesTable tbody");
+
+                entries.forEach(entry => {
+                    const row = tableBody.insertRow();
+                    row.insertCell(0).textContent = entry.Line_Description;
+                    row.insertCell(1).textContent = entry.Line_Journal_ID;
+                    row.insertCell(2).textContent = entry.Line_Number;
+                    row.insertCell(3).textContent = entry.Line_Operator_ID;
+                    row.insertCell(4).textContent = entry.Line_Source_ID;
+                });
+            }
+            // Call the loadEntries function when the document is ready
+            document.addEventListener("DOMContentLoaded", loadEntries);
+        </script>
+            
     </body>
-</html> 
+</html>

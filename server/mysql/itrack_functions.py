@@ -1,3 +1,4 @@
+import json
 import mysql.connector
 from mysql_db import mysql_connect
 
@@ -74,7 +75,37 @@ def insert_asset_entry(journal_id, journal_date, gl_account, account_description
         cursor.close()
         connection.close()
 
+def get_entries_from_database():
+    try:
+        # Establish a database connection
+        connection = mysql_connect()
+        cursor = connection.cursor()
+
+        # Execute a SQL query to retrieve data from the "Entries" table
+        query = "SELECT * FROM Entries"
+        cursor.execute(query)
+
+        # Fetch all rows as a list of dictionaries
+        columns = [column[0] for column in cursor.description]
+        data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+        # Close the cursor and connection
+        cursor.close()
+        connection.close()
+
+        return json.dumps(data)  # Convert the data to JSON and return
+
+    except mysql.connector.Error as error:
+        return json.dumps({"error": str(error)})
+
+
+# # Example usage:
+# insert_asset_entry("12345", "2023-10-24", "1001", "IT Assets", 1500.0, "New laptops", "Purchased 10 laptops",
+#                   "user123", "John Doe", "4", 2023, "Purchase", "2023-10-24", "123", "Vendor Inc.", "INV123",
+#                   "C567", "School District", "B987")
+
+
 # Example usage:
-insert_asset_entry("12345", "2023-10-24", "1001", "IT Assets", 1500.0, "New laptops", "Purchased 10 laptops",
-                  "user123", "John Doe", "4", 2023, "Purchase", "2023-10-24", "123", "Vendor Inc.", "INV123",
-                  "C567", "School District", "B987")
+if __name__ == "__main__":
+    entries = get_entries_from_database()
+    print(entries)
