@@ -75,3 +75,9 @@ body {
 .jumbotron-heading {
     font-family: 'Oswald', sans-serif !important;
 }
+.col {
+    padding-bottom: 20px;
+}
+.submitbutton {
+    padding-top: 25px;
+}
