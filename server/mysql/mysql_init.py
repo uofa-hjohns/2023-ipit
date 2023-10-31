@@ -15,6 +15,12 @@ print("INIT: MySQL installed through APT")
 subprocess.run("python -m pip install mysql-connector-python", shell=True, stdout=logfile)
 print("INIT: MySQL-Connector-Python installed through PIP")
 
+subprocess.run("python -m pip install -U Flask", shell=True, stdout=logfile)
+print("INIT: Flask installed through PIP")
+
+subprocess.run("python -m pip install -U flask-cors", shell=True, stdout=logfile)
+print("INIT: Flask CORS installed through PIP")
+
 subprocess.run("sudo /etc/init.d/mysql stop", shell=True, stdout=logfile, stderr=subprocess.STDOUT)
 subprocess.run("sudo service mysql stop", shell=True, stdout=logfile, stderr=subprocess.STDOUT)
 subprocess.run("sudo killall -KILL mysql mysqld_safe mysqld", shell=True, stdout=logfile, stderr=subprocess.STDOUT)
