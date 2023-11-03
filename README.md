@@ -1,5 +1,5 @@
 # ITrack
-A platform for
+A platform for managing a ledger database through a web-client.
 ## Prerequisites 
 ITrack requires [Python](https://www.python.org/), [PIP](https://pypi.org/project/pip/) and [MySQL](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/) to be installed in order to function. Find the correct version for your environment before continuing.
 
