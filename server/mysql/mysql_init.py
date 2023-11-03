@@ -12,6 +12,9 @@ print("INIT: MySQL Default installed through APT")
 subprocess.run("sudo apt-get -y install mysql-server", shell=True, stdout=logfile)
 print("INIT: MySQL installed through APT")
 
+subprocess.run("python -m pip install --upgrade pip --no-warn-script-location", shell=True, stdout=logfile)
+print("INIT: Installed/upgraded PIP")
+
 subprocess.run("python -m pip install mysql-connector-python", shell=True, stdout=logfile)
 print("INIT: MySQL-Connector-Python installed through PIP")
 
